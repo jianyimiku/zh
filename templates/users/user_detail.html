@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static thumbnail%}
+
+{% block title %}{{ object.username }}----{{ block.super }}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-sm-12">
+        {% thumbnail object.picture "x180" as im %}
+            <img src="{{ im.url }}" alt="用户头像" >
+        {% empty %}
+            <img src="{% static 'img/user.png' %}" height="180px" alt="没有头像">
+        {% endthumbnail %}
+    </div>
+
+    <div class="col-md-7">
+        <div class="card card-body"><p>{{ object.introduction }}</p></div>
+    </div>
+    <div class="col-md-3">
+        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+        {{ object.get_profile_name }}
+        <br/>
+        <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">{{ object.email }}</a>
+        <br/>
+        {% if object.job_title %}
+            <i class="fa fa-briefcase" aria-hidden="true"></i> {{ object.job_title }} <br/>
+        {% endif %}
+        {% if object.location %}
+            <i class="fa fa-map-marker" aria-hidden="true"></i> {{ object.location }} <br/>
+        {% endif %}
+       <div class="mb-2"></div>
+        <!--自己的页面现实更新按钮 -->
+        {% if request.user.username == object.username %}
+            <a class="btn btn-primary" href="{% url "users:update" %}">更新信息</a>
+            <a class="btn btn-primary" href="{% url 'account_email' %}" >E-Mail</a>
+        {% endif %}
+    </div>
+  </div>
+{% endblock content %}
+
