@@ -62,3 +62,5 @@ class ArticleEditView(LoginRequiredMixin, AuthorRequireMixin, UpdateView):
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse("articles:article", kwargs={"slug": self.get_object().slug})
+
+

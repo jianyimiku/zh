@@ -53,9 +53,12 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'users',
     'news',
     'articles',
+    'qa',
+    'messager',
     'django.contrib.sites',
     'allauth', # allauth包
     'allauth.account', # 本地的allauth认证
@@ -75,7 +78,6 @@ INSTALLED_APPS = [
     'markdownx',
     'django.forms',
     'django_comments',
-
 ]
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 MARKDOWNX_SERVER_CALL_LATENCY = 1000
@@ -99,7 +101,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+CSRF_COOKIE_HTTPONLY = False
 ROOT_URLCONF = 'zh.urls'
 
 TEMPLATES = [
