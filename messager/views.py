@@ -3,6 +3,7 @@
 # __author__ = '__Jack__'
 
 from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
@@ -12,7 +13,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.template.loader import render_to_string
 
-# from channels.layers import get_channel_layer
+
 
 from messager.models import Message
 from zh.helpers import ajax_required
@@ -72,7 +73,7 @@ def send_message(request):
         channel_layer = get_channel_layer()
         payload = {
             'type': 'receive',
-            'message': render_to_string('messager/single_message.html', {"message": msg}),
+            'message': render_to_string('messager/single_message.html', {"message": msg}),##把模板渲染好返回
             'sender': sender.username
         }
         # group_send(group: 所在组-接收者的username, message: 消息内容)
