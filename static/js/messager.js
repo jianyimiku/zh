@@ -9,7 +9,7 @@ $(function () {
     // AJAX POST发送消息
     $("#send").submit(function () {
         $.ajax({
-            url: '/messages/send-message/',
+            url: '/messager/send-message/',
             data: $("#send").serialize(),
             cache: false,
             type: 'POST',

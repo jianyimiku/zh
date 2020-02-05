@@ -1,8 +1,3 @@
-#!/usr/bin/python3
-# -*- coding:utf-8 -*-
-# __author__ = '__Jack__'
-
-
 from __future__ import unicode_literals
 import uuid
 
@@ -17,15 +12,15 @@ class MessageQuerySet(models.query.QuerySet):
 
     def get_conversation(self, sender, recipient):
         """用户间的私信会话"""
-        qs_one = self.filter(sender=sender, recipient=recipient)  # A发送给B的消息
-        qs_two = self.filter(sender=recipient, recipient=sender) # B发送给A的消息
+        qs_one = self.filter(sender=sender, recipient=recipient).select_related('sender', 'recipient')  # A发送给B的消息
+        qs_two = self.filter(sender=recipient, recipient=sender).select_related('sender', 'recipient')  # B发送给A的消息
         return qs_one.union(qs_two).order_by('created_at')  # 取并集后按时间排序
 
     def get_most_recent_conversation(self, recipient):
         """获取最近一次私信互动的用户"""
         try:
-            qs_sent = self.filter(sender=recipient)  # 当前登录用户发送的消息
-            qs_received = self.filter(recipient=recipient)  # 当前登录用户接收的消息
+            qs_sent = self.filter(sender=recipient).select_related('sender', 'recipient')  # 当前登录用户发送的消息
+            qs_received = self.filter(recipient=recipient).select_related('sender', 'recipient')  # 当前登录用户接收的消息
             qs = qs_sent.union(qs_received).latest("created_at")  # 最后一条消息
             if qs.sender == recipient:
                 # 如果登录用户有发送消息，返回消息的接收者
