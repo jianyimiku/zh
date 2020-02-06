@@ -65,7 +65,7 @@ class Question(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name = "q_author",
                              on_delete=models.CASCADE, verbose_name= "提问者")
-    title = models.CharField(max_length=255, unique=True, verbose_name='提问者')
+    title = models.CharField(max_length=255, unique=True, verbose_name='标题')
     slug = models.SlugField(max_length=80, null=True, blank=True, verbose_name="(URL)别名")
     status = models.CharField(max_length=1, choices=STATUS, default='O', verbose_name='问题状态')
     content = MarkdownxField(verbose_name='内容')

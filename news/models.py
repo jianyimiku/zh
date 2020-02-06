@@ -1,7 +1,8 @@
+from asgiref.sync import async_to_sync
 from django.db import models
 from users.models import User
 import uuid
-
+from channels.layers import get_channel_layer
 
 # Create your models here.
 class News(models.Model):
@@ -23,6 +24,19 @@ class News(models.Model):
 
     def __str__(self):
         return self.content
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        super(News, self).save()
+        if not self.reply:
+            channel_layer = get_channel_layer()
+            payload = {
+                'type': 'receive',
+                'key': 'additional_news',
+                'actor_name': self.user,
+            }
+            async_to_sync(channel_layer.group_send)("notifications", payload)
+
 
     def switch_like(self, user):
         ''' 点赞或者取消赞 '''
