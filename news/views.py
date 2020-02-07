@@ -88,3 +88,13 @@ class NewsDeleteView(LoginRequiredMixin, AuthorRequireMixin, DeleteView):
     # slug_url_kwarg = 'slug' # 通过url传入要删除的主键id 默认值是slug
     # pk_url_kwarg = 'pk' # 通过url传入要删除的主键id 默认值是pk
     success_url = reverse_lazy("news:list")  # 在项目URLConf未加载前使用
+
+
+@login_required
+@ajax_required
+@require_http_methods(["POST"])
+def update_interactions(request):
+    """更新互动信息"""
+    data_point = request.POST['id_value']
+    news = News.objects.get(pk=data_point)
+    return JsonResponse({'likes': news.count_likers(), 'comments': news.comment_count()})

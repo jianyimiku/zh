@@ -15,6 +15,8 @@ from zh.helpers import ajax_required
 from qa.models import Question, Answer
 from qa.form import QuestionForm
 
+from notifications.views import notification_handler
+
 
 class QuestionListView(LoginRequiredMixin, ListView):
     """所有问题页"""
@@ -147,4 +149,5 @@ def accept_answer(request):
     if answer.question.user.username != request.user.username:
         raise PermissionDenied
     answer.accept_answer()
+    notification_handler(request.user, answer.user, 'W', answer)
     return JsonResponse({'status': 'true'}, status=200)

@@ -3,7 +3,7 @@ from django.db import models
 from users.models import User
 import uuid
 from channels.layers import get_channel_layer
-
+from notifications.views import notification_handler
 # Create your models here.
 class News(models.Model):
     uuid_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -42,8 +42,10 @@ class News(models.Model):
         ''' 点赞或者取消赞 '''
         if user in self.liked.all():
             self.liked.remove(user)
+
         else:
             self.liked.add(user)
+            notification_handler(user, self.user, 'L', self, id_value=str(self.uuid_id), key='social_update')
 
     def get_parent(self):
         ''' 返回自关联中的上级目录 '''
@@ -60,6 +62,7 @@ class News(models.Model):
             reply=True,
             parent=parent
         )
+        notification_handler(user, parent.user, 'R', parent, id_value=str(parent.uuid_id), key='social_update')
 
     def get_thread(self):
         parent = self.get_parent()

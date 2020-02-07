@@ -62,7 +62,6 @@ $(function () {
 
     // 监听后端发送过来的消息
     ws.onmessage = function (event) {
-        console.log(1);
         const data = JSON.parse(event.data);
         switch (data.key) {
             case "notification":

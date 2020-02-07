@@ -7,6 +7,10 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from zh.helpers import AuthorRequireMixin
 from django.shortcuts import reverse
+
+from django_comments.signals import comment_was_posted
+
+from notifications.views import notification_handler
 # Create your views here.
 
 class ArticleListView(LoginRequiredMixin, ListView):
@@ -63,4 +67,13 @@ class ArticleEditView(LoginRequiredMixin, AuthorRequireMixin, UpdateView):
         messages.success(self.request, self.message)
         return reverse("articles:article", kwargs={"slug": self.get_object().slug})
 
+
+def notify_comment(**kwargs):
+    '''文章有评论通知作者 '''
+    actor = kwargs['request'].user
+    obj = kwargs['comment'].content_object
+
+    notification_handler(actor, obj.user, 'C', 'obj')
+
+comment_was_posted.connect(receiver=notify_comment)
 

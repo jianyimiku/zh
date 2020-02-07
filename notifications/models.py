@@ -88,7 +88,7 @@ class Notification(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         if not self.slug:
-            self.slug = slugify(f'{self.recipent}{self.uuid_id}{self.verb}')
+            self.slug = slugify(f'{self.recipient}{self.uuid_id}{self.verb}')
             super(Notification, self).save()
 
     def mark_as_read(self):
