@@ -30,5 +30,6 @@ urlpatterns = [
     path("comments/", include("django_comments.urls")),
     path("qa/", include("qa.urls", namespace="qa")),
     path("messager/", include("messager.urls", namespace="messager")),
-    path("notifications/", include("notifications.urls", namespace="notifications"))
+    path("notifications/", include("notifications.urls", namespace="notifications")),
+    path("search/", include("haystack.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
